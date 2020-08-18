@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>box_publisher</name>
+  <name>topic_publisher</name>
   <version>0.0.0</version>
-  <description>The box_publisher package</description>
+  <description>The topic_publisher package</description>
 
-  <maintainer email="takuchi@jsk.imi.i.u-tokyo.ac.jp">kosuke</maintainer>
-  <license>BSD</license>
+  <maintainer email="kosuke.tnp@gmail.com">kosuke</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>dynamic_reconfigure</build_depend>

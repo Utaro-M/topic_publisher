@@ -7,12 +7,12 @@ import rospy
 from dynamic_reconfigure.server import Server
 from jsk_recognition_msgs.msg import BoundingBox
 
-from box_publisher.cfg import DynamicParamsConfig
+from topic_publisher.cfg import BoxParamsConfig
 
 
 class Boxpublisher():
     def __init__(self):
-        self.srv = Server(DynamicParamsConfig,
+        self.srv = Server(BoxParamsConfig,
                           self.dynamic_reconfigure_callback)
         self.pub = rospy.Publisher("~output", BoundingBox, queue_size=1)
         self.box = BoundingBox()
@@ -53,7 +53,7 @@ class Boxpublisher():
 
 def main(args):
     rospy.init_node("box_publisher", anonymous=False)
-    bp = Boxpublisher()
+    Boxpublisher()
     rospy.spin()
 
 
