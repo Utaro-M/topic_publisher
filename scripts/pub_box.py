@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*
 
-from dynamic_reconfigure.server import Server
-from box_publisher.cfg import DynamicParamsConfig
-import rospy
-from jsk_recognition_msgs.msg import BoundingBox
 import sys
+
+import rospy
+from dynamic_reconfigure.server import Server
+from jsk_recognition_msgs.msg import BoundingBox
+
+from box_publisher.cfg import DynamicParamsConfig
 
 
 class Boxpublisher():
@@ -57,4 +59,3 @@ def main(args):
 
 if __name__ == '__main__':
     main(sys.argv)
-
