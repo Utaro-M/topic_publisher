@@ -4,7 +4,7 @@
   <version>0.0.0</version>
   <description>The box_publisher package</description>
 
-  <maintainer email="takeuchi@jsk.imi.i.u-tokyo.ac.jp">kosuke</maintainer>
+  <maintainer email="takuchi@jsk.imi.i.u-tokyo.ac.jp">kosuke</maintainer>
   <license>BSD</license>
 
   <buildtool_depend>catkin</buildtool_depend>

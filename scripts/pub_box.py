@@ -22,7 +22,7 @@ class Boxpublisher():
         self.w = rospy.get_param("~w", 0.6)
         self.d = rospy.get_param("~d", 0.6)
         self.h = rospy.get_param("~h", 0.2)
-        self.timer = rospy.Timer(rospy.Duration(0.1), self.timer_callback)
+        self.timer = rospy.Timer(rospy.Duration(0.01), self.timer_callback)
 
     def dynamic_reconfigure_callback(self, config, level):
         self.x = config["x"]
