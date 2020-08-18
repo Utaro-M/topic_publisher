@@ -51,11 +51,7 @@ class BoxPublisher():
         self.pub.publish(self.box)
 
 
-def main(args):
+if __name__ == '__main__':
     rospy.init_node("box_publisher", anonymous=False)
     BoxPublisher()
     rospy.spin()
-
-
-if __name__ == '__main__':
-    main(sys.argv)
