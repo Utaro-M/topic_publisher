@@ -10,6 +10,7 @@ find_package(PythonLibs REQUIRED)
 
 generate_dynamic_reconfigure_options(
   cfg/BoxParams.cfg
+  cfg/RelativePoseParams.cfg
   )
 
 include_directories(
