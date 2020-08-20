@@ -3,7 +3,8 @@
 
 import rospy
 import numpy as np
-from skrobot import coordinates
+from skrobot.coordinates import Coordinates
+from skrobot.coordinates.math import rpy2quaternion
 from dynamic_reconfigure.server import Server
 from geometry_msgs.msg import PoseStamped
 
@@ -12,6 +13,10 @@ from topic_publisher.cfg import RelativePoseParamsConfig
 
 class RelativePosePublisher():
     def __init__(self):
+        self.pub = rospy.Publisher('~output', PoseStamped, queue_size=1)
+        self.pose_stamped = PoseStamped()
+        self.subscribe()
+
         self.srv = Server(RelativePoseParamsConfig,
                           self.dynamic_reconfigure_callback)
         self.x = rospy.get_param('~x', 0.)
@@ -20,12 +25,7 @@ class RelativePosePublisher():
         self.roll = np.deg2rad(rospy.get_param('~roll', 0.))
         self.pitch = np.deg2rad(rospy.get_param('~pitch', 0.))
         self.yaw = np.deg2rad(rospy.get_param('~yaw', 0.))
-        self.q = coordinates.math.rpy2quaternion(
-            [self.yaw, self.pitch, self.roll])
-
-        self.pub = rospy.Publisher('~output', PoseStamped, queue_size=1)
-        self.pose_stamped = PoseStamped()
-        self.subscribe()
+        self.q = rpy2quaternion([self.yaw, self.pitch, self.roll])
 
     def subscribe(self):
         self.sub = rospy.Subscriber(
@@ -38,19 +38,18 @@ class RelativePosePublisher():
         self.roll = np.deg2rad(config['roll'])
         self.pitch = np.deg2rad(config['pitch'])
         self.yaw = np.deg2rad(config['yaw'])
-        self.q = coordinates.math.rpy2quaternion(
-            [self.yaw, self.pitch, self.roll])
+        self.q = rpy2quaternion([self.yaw, self.pitch, self.roll])
         return config
 
     def callback(self, msg):
         rospy.loginfo("pub relative pose")
-        source_coords = coordinates.Coordinates(
+        source_coords = Coordinates(
             pos=[msg.pose.position.x, msg.pose.position.y,
                  msg.pose.position.z],
             rot=[msg.pose.orientation.w, msg.pose.orientation.x,
                  msg.pose.orientation.y, msg.pose.orientation.z])
 
-        source2dist_coords = coordinates.Coordinates(
+        source2dist_coords = Coordinates(
             pos=[self.x, self.y, self.z], rot=self.q)
 
         dist_coords \
