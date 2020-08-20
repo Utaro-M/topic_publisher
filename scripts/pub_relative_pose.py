@@ -20,6 +20,8 @@ class RelativePosePublisher():
         self.roll = np.deg2rad(rospy.get_param('~roll', 0.))
         self.pitch = np.deg2rad(rospy.get_param('~pitch', 0.))
         self.yaw = np.deg2rad(rospy.get_param('~yaw', 0.))
+        self.q = coordinates.math.rpy2quaternion(
+            [self.yaw, self.pitch, self.roll])
 
         self.pub = rospy.Publisher('~output', PoseStamped, queue_size=1)
         self.pose_stamped = PoseStamped()
