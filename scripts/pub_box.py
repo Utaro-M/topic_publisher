@@ -16,6 +16,7 @@ class BoxPublisher():
         self.box = BoundingBox()
         self.frame = rospy.get_param("~frame", "/base_link")
         self.box.header.frame_id = self.frame
+        self.box.header.seq = 0
 
         self.srv = Server(BoxParamsConfig,
                           self.dynamic_reconfigure_callback)
@@ -46,9 +47,9 @@ class BoxPublisher():
 
         return config
 
-    def timer_callback(self, timer):
+    def timer_callback(self, event):
         rospy.loginfo("pub box")
-        self.box.header.stamp = rospy.Time.now()
+        self.box.header.stamp = event.current_real
         self.box.pose.position.x = self.x
         self.box.pose.position.y = self.y
         self.box.pose.position.z = self.z
