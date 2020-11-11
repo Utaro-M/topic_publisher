@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*
 
-import rospy
 import numpy as np
+import rospy
 from skrobot.coordinates import Coordinates
-from skrobot.coordinates.math import rpy2quaternion
-from dynamic_reconfigure.server import Server
 from geometry_msgs.msg import PoseStamped
+from dynamic_reconfigure.server import Server
+from skrobot.coordinates.math import rpy2quaternion
 
 from topic_publisher.cfg import RelativePoseParamsConfig
 
@@ -42,7 +42,6 @@ class RelativePosePublisher():
         return config
 
     def callback(self, msg):
-        rospy.loginfo("pub relative pose")
         source_coords = Coordinates(
             pos=[msg.pose.position.x, msg.pose.position.y,
                  msg.pose.position.z],
