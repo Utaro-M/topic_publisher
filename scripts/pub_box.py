@@ -3,9 +3,11 @@
 
 import numpy as np
 import rospy
+from math import cos
+from math import sin
 from dynamic_reconfigure.server import Server
 from jsk_recognition_msgs.msg import BoundingBox
-from skrobot.coordinates.math import rpy2quaternion
+# from skrobot.coordinates.math import rpy2quaternion
 
 from topic_publisher.cfg import BoxParamsConfig
 
@@ -29,7 +31,7 @@ class BoxPublisher():
         self.roll = np.deg2rad(rospy.get_param('~roll', 0.))
         self.pitch = np.deg2rad(rospy.get_param('~pitch', 0.))
         self.yaw = np.deg2rad(rospy.get_param('~yaw', 0.))
-        self.q = rpy2quaternion([self.yaw, self.pitch, self.roll])
+        self.q = self.rpy2quaternion([self.yaw, self.pitch, self.roll])
 
         self.timer = rospy.Timer(rospy.Duration(0.01), self.timer_callback)
 
@@ -43,7 +45,7 @@ class BoxPublisher():
         self.roll = np.deg2rad(config['roll'])
         self.pitch = np.deg2rad(config['pitch'])
         self.yaw = np.deg2rad(config['yaw'])
-        self.q = rpy2quaternion([self.yaw, self.pitch, self.roll])
+        self.q = self.rpy2quaternion([self.yaw, self.pitch, self.roll])
 
         return config
 
@@ -63,6 +65,39 @@ class BoxPublisher():
 
         self.pub.publish(self.box)
 
+    def rpy2quaternion(self,rpy):
+        """Return Quaternion from yaw-pitch-roll angles.
+
+        Parameters
+        ----------
+        rpy : numpy.ndarray or list
+        Vector of yaw-pitch-roll angles in radian.
+
+        Returns
+        -------
+        quat : numpy.ndarray
+        Quaternion in [w x y z] format.
+
+        Examples
+        --------
+        >>> import numpy as np
+        >>> from skrobot.coordinates.math import rpy2quaternion
+        >>> rpy2quaternion([0, 0, 0])
+        array([1., 0., 0., 0.])
+        >>> yaw = np.pi / 3.0
+        >>> rpy2quaternion([yaw, 0, 0])
+        array([0.8660254, 0.       , 0.       , 0.5      ])
+        >>> rpy2quaternion([np.pi * 2 - yaw, 0, 0])
+        array([-0.8660254, -0.       ,  0.       ,  0.5      ])
+        """
+        yaw, pitch, roll = rpy
+        cr, cp, cy = cos(roll / 2.), cos(pitch / 2.), cos(yaw / 2.)
+        sr, sp, sy = sin(roll / 2.), sin(pitch / 2.), sin(yaw / 2.)
+        return np.array([
+            cr * cp * cy + sr * sp * sy,
+            -cr * sp * sy + cp * cy * sr,
+            cr * cy * sp + sr * cp * sy,
+            cr * cp * sy - sr * cy * sp])
 
 if __name__ == '__main__':
     rospy.init_node("box_publisher", anonymous=False)
